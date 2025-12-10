@@ -8,6 +8,7 @@ import { Send, User, Bot, LogOut, Crown, Settings, ChevronDown, MessageCircle } 
 import { cn } from '@/lib/utils';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { useAuth } from '@/app/context/AuthContext';
+import { API_URL } from '@/lib/config';
 
 export default function WorkerChat() {
     const { user, logout, isLoading } = useAuth();
@@ -41,15 +42,14 @@ export default function WorkerChat() {
             }
 
             console.log('🔑 Using token:', token.substring(0, 20) + '...');
-            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-            console.log('🌐 API URL:', apiUrl);
+            console.log('🌐 API URL:', API_URL);
             
             // Add timeout and retry logic
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
             
-            console.log('📡 Making request to:', `${apiUrl}/my-messages`);
-            const res = await fetch(`${apiUrl}/my-messages`, {
+            console.log('📡 Making request to:', `${API_URL}/my-messages`);
+            const res = await fetch(`${API_URL}/my-messages`, {
                 headers: {
                     "Authorization": `Bearer ${token}`,
                     "Content-Type": "application/json"

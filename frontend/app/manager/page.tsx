@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { API_URL } from '@/lib/config';
 import { 
     Activity, 
     AlertTriangle, 
@@ -262,10 +263,10 @@ export default function ManagerDashboard() {
     // Debug environment variables
     useEffect(() => {
         console.log('Environment check:');
-        console.log('NEXT_PUBLIC_API_URL:', process.env.NEXT_PUBLIC_API_URL);
+        console.log('NEXT_PUBLIC_API_URL:', API_URL);
         console.log('Current origin:', window.location.origin);
         
-        if (!process.env.NEXT_PUBLIC_API_URL) {
+        if (!API_URL) {
             console.error('NEXT_PUBLIC_API_URL is not defined!');
         }
     }, []);
@@ -527,7 +528,7 @@ export default function ManagerDashboard() {
         setAddEmployeeSuccess("");
 
         try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/register/employee`, {
+            const res = await fetch(`${API_URL}/auth/register/employee`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -574,7 +575,7 @@ export default function ManagerDashboard() {
         setIsLoadingTeam(true);
         
         try {
-            const res = await fetchWithRetry(`${process.env.NEXT_PUBLIC_API_URL}/auth/team-members`);
+            const res = await fetchWithRetry(`${API_URL}/auth/team-members`);
             
             if (res.ok) {
                 const data = await res.json();
@@ -597,7 +598,7 @@ export default function ManagerDashboard() {
 
     const handleEditMember = async (memberId: number, updatedData: any) => {
         try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/update-member/${memberId}`, {
+            const res = await fetch(`${API_URL}/auth/update-member/${memberId}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -616,7 +617,7 @@ export default function ManagerDashboard() {
 
     const handleDeleteMember = async (memberId: number) => {
         try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/delete-member/${memberId}`, {
+            const res = await fetch(`${API_URL}/auth/delete-member/${memberId}`, {
                 method: "DELETE",
                 headers: {
                     "Authorization": `Bearer ${token}`
@@ -646,7 +647,7 @@ export default function ManagerDashboard() {
         if (!token) return;
         setIsLoadingMessages(true);
         try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/messages/${workerId}`, {
+            const res = await fetch(`${API_URL}/messages/${workerId}`, {
                 headers: {
                     "Authorization": `Bearer ${token}`
                 }
@@ -683,7 +684,7 @@ export default function ManagerDashboard() {
         setMessageInput("");
         
         try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/send-message`, {
+            const res = await fetch(`${API_URL}/send-message`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -731,7 +732,7 @@ export default function ManagerDashboard() {
             if (attendanceDateTo) params.append('date_to', attendanceDateTo);
             if (attendanceSearchTerm) params.append('search', attendanceSearchTerm);
             
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/attendance?${params.toString()}`, {
+            const res = await fetch(`${API_URL}/attendance?${params.toString()}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -758,7 +759,7 @@ export default function ManagerDashboard() {
             if (attendanceDateFrom) params.append('date_from', attendanceDateFrom);
             if (attendanceDateTo) params.append('date_to', attendanceDateTo);
             
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/attendance/analytics?${params.toString()}`, {
+            const res = await fetch(`${API_URL}/attendance/analytics?${params.toString()}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -854,7 +855,7 @@ export default function ManagerDashboard() {
             if (incidentsDateTo) params.append('date_to', incidentsDateTo);
             if (incidentsSearchTerm) params.append('search', incidentsSearchTerm);
             
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/incidents?${params.toString()}`, {
+            const res = await fetch(`${API_URL}/incidents?${params.toString()}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -881,7 +882,7 @@ export default function ManagerDashboard() {
             if (incidentsDateFrom) params.append('date_from', incidentsDateFrom);
             if (incidentsDateTo) params.append('date_to', incidentsDateTo);
             
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/incidents/stats?${params.toString()}`, {
+            const res = await fetch(`${API_URL}/incidents/stats?${params.toString()}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -902,7 +903,7 @@ export default function ManagerDashboard() {
         if (!token || !newIncident.description) return;
         
         try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/incidents`, {
+            const res = await fetch(`${API_URL}/incidents`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -928,7 +929,7 @@ export default function ManagerDashboard() {
         if (!token) return;
         
         try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/incidents/${incidentId}`, {
+            const res = await fetch(`${API_URL}/incidents/${incidentId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -1012,7 +1013,7 @@ export default function ManagerDashboard() {
             if (permissionsDateTo) params.append('date_to', permissionsDateTo);
             if (permissionsSearchTerm) params.append('search', permissionsSearchTerm);
             
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/permissions?${params.toString()}`, {
+            const res = await fetch(`${API_URL}/permissions?${params.toString()}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -1039,7 +1040,7 @@ export default function ManagerDashboard() {
             if (permissionsDateFrom) params.append('date_from', permissionsDateFrom);
             if (permissionsDateTo) params.append('date_to', permissionsDateTo);
             
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/permissions/stats?${params.toString()}`, {
+            const res = await fetch(`${API_URL}/permissions/stats?${params.toString()}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -1060,7 +1061,7 @@ export default function ManagerDashboard() {
         if (!token) return;
         
         try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/permissions/${requestId}`, {
+            const res = await fetch(`${API_URL}/permissions/${requestId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
