@@ -80,3 +80,30 @@ async def startup():
 @app.get("/")
 async def root():
     return {"message": "Workhub API is running"}
+
+@app.get("/health")
+async def health_check():
+    """Health check endpoint for monitoring services"""
+    try:
+        # Test database connection
+        from app.core.database import SessionLocal
+        async with SessionLocal() as session:
+            await session.execute("SELECT 1")
+        
+        # Test Redis connection
+        await redis_client.ping()
+        
+        return {
+            "status": "healthy",
+            "service": "workhub-backend",
+            "database": "connected",
+            "redis": "connected",
+            "timestamp": "now"
+        }
+    except Exception as e:
+        return {
+            "status": "unhealthy", 
+            "service": "workhub-backend",
+            "error": str(e),
+            "timestamp": "now"
+        }

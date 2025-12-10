@@ -59,9 +59,63 @@ async def shutdown():
     print("👋 WorkHub Agent shutting down")
 
 @app.get("/")
-async def health_check():
-    """Health check endpoint"""
+async def root():
+    """Basic status endpoint"""
     return {"status": "🤖 WorkHub Agent is running!", "version": "1.0.0"}
+
+@app.get("/health")
+async def health_check():
+    """Health check endpoint for monitoring services"""
+    try:
+        health_status = {
+            "status": "healthy",
+            "service": "workhub-agent",
+            "version": "1.0.0",
+            "timestamp": datetime.now().isoformat()
+        }
+        
+        # Test database connection
+        try:
+            if db_processor.pool:
+                # Test database with a simple query
+                async with db_processor.pool.acquire() as conn:
+                    await conn.fetchval("SELECT 1")
+                health_status["database"] = "connected"
+            else:
+                health_status["database"] = "not_initialized"
+        except Exception as e:
+            health_status["database"] = f"error: {str(e)}"
+            
+        # Test Redis connection
+        try:
+            if redis_client:
+                redis_client.ping()
+                health_status["redis"] = "connected"
+            else:
+                health_status["redis"] = "not_initialized"
+        except Exception as e:
+            health_status["redis"] = f"error: {str(e)}"
+            
+        # Test Groq API key availability
+        health_status["groq_api"] = "configured" if GROQ_KEY else "missing"
+        
+        # Determine overall health
+        if (health_status.get("database") == "connected" and 
+            health_status.get("redis") == "connected" and
+            health_status.get("groq_api") == "configured"):
+            health_status["status"] = "healthy"
+        else:
+            health_status["status"] = "degraded"
+            
+        return health_status
+        
+    except Exception as e:
+        return {
+            "status": "unhealthy",
+            "service": "workhub-agent", 
+            "error": str(e),
+            "timestamp": datetime.now().isoformat()
+        }
 
 @app.post("/process-message", response_model=AgentResponse)
 async def process_message(message_data: WorkerMessage):
