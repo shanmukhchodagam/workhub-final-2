@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import Link from "next/link";
+import { API_URL } from "@/lib/config";
 
 export default function LoginPage() {
     const [email, setEmail] = useState("");
@@ -16,8 +17,7 @@ export default function LoginPage() {
         setIsGoogleLoading(true);
         
         try {
-            const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-            const response = await fetch(`${apiUrl}/auth/google/auth-url`);
+            const response = await fetch(`${API_URL}/auth/google/auth-url`);
             
             if (response.ok) {
                 const data = await response.json();
@@ -43,12 +43,11 @@ export default function LoginPage() {
             formData.append("username", email); // OAuth2 expects 'username'
             formData.append("password", password);
 
-            const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-            console.log("API URL:", apiUrl);
-            console.log("Full URL:", `${apiUrl}/auth/token`);
+            console.log("API URL:", API_URL);
+            console.log("Full URL:", `${API_URL}/auth/token`);
             console.log("Login attempt with:", { email, passwordLength: password.length });
 
-            const res = await fetch(`${apiUrl}/auth/token`, {
+            const res = await fetch(`${API_URL}/auth/token`, {
                 method: "POST",
                 body: formData,
             });

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import Link from "next/link";
+import { API_URL } from "@/lib/config";
 
 export default function RegisterPage() {
     const [fullName, setFullName] = useState("");
@@ -17,7 +18,7 @@ export default function RegisterPage() {
         setError("");
 
         try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/register/manager`, {
+            const res = await fetch(`${API_URL}/auth/register/manager`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

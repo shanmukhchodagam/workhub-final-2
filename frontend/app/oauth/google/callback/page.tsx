@@ -3,6 +3,7 @@
 import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { useAuth } from "../../../context/AuthContext";
+import { API_URL } from "@/lib/config";
 
 function GoogleCallbackContent() {
     const [status, setStatus] = useState("processing");
@@ -47,8 +48,7 @@ function GoogleCallbackContent() {
                     return;
                 }
 
-                const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-                const response = await fetch(`${apiUrl}/auth/google/callback?code=${code}`, {
+                const response = await fetch(`${API_URL}/auth/google/callback?code=${code}`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",

@@ -1,6 +1,7 @@
 import { Task, Employee, CreateTaskRequest, UpdateTaskRequest } from '@/types';
+import { API_URL } from './config';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+const API_BASE_URL = API_URL;
 
 // Helper function to get auth headers
 const getAuthHeaders = () => {
