@@ -5,6 +5,10 @@ from .config import settings
 engine = create_async_engine(
     settings.DATABASE_URL,
     echo=True,
+    pool_pre_ping=True,  # Enable connection health checks
+    pool_recycle=3600,   # Recycle connections after 1 hour
+    pool_size=5,         # Number of connections to maintain
+    max_overflow=10,     # Max connections beyond pool_size
     connect_args={"server_settings": {"jit": "off"}}
 )
 

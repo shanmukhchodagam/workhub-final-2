@@ -86,9 +86,10 @@ async def health_check():
     """Health check endpoint for monitoring services"""
     try:
         # Test database connection
-        from app.core.database import SessionLocal
-        async with SessionLocal() as session:
-            await session.execute("SELECT 1")
+        from app.core.database import AsyncSessionLocal
+        from sqlalchemy import text
+        async with AsyncSessionLocal() as session:
+            await session.execute(text("SELECT 1"))
         
         # Test Redis connection
         await redis_client.ping()
