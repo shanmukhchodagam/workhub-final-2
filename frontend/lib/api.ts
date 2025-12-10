@@ -15,7 +15,7 @@ const getAuthHeaders = () => {
 
 // Helper function for fetch with retry logic
 const fetchWithRetry = async (url: string, options: RequestInit = {}, maxRetries = 3): Promise<Response> => {
-  let lastError: Error;
+  let lastError: Error | undefined;
   
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
@@ -60,7 +60,7 @@ const fetchWithRetry = async (url: string, options: RequestInit = {}, maxRetries
     }
   }
   
-  throw lastError;
+  throw lastError || new Error('Fetch failed after retries');
 };
 
 // Helper function to handle API responses
