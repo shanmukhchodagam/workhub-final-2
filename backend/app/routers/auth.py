@@ -493,7 +493,8 @@ async def google_oauth_callback(
             )
             
             # Redirect to frontend with token
-            frontend_url = f"http://localhost:3000/oauth/google/callback?token={access_token}"
+            from app.core.config import settings
+            frontend_url = f"{settings.FRONTEND_URL}/oauth/google/callback?token={access_token}"
             return RedirectResponse(url=frontend_url)
         
         else:
@@ -539,7 +540,8 @@ async def google_oauth_callback(
                 )
                 
                 # Redirect to frontend with token
-                frontend_url = f"http://localhost:3000/oauth/google/callback?token={access_token}&new_user=true"
+                from app.core.config import settings
+                frontend_url = f"{settings.FRONTEND_URL}/oauth/google/callback?token={access_token}&new_user=true"
                 return RedirectResponse(url=frontend_url)
                 
             except Exception as e:

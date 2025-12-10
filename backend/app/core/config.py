@@ -5,6 +5,7 @@ class Settings(BaseSettings):
     REDIS_URL: str
     SECRET_KEY: str
     API_PORT: int = 8000
+    FRONTEND_URL: str = "http://localhost:3000"  # Default for local dev
 
     class Config:
         env_file = ".env.docker"
